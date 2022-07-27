@@ -29,7 +29,7 @@ struct fb_info_t {
 };
 
 /* os dependent typedef/include */
-#if defined(__linux__)
+#if defined(__linux__) || defined(__pastoral__)
     #include "linux.h"
 #elif defined(__FreeBSD__)
     #include "freebsd.h"

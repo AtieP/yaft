@@ -217,6 +217,7 @@ int eopenpty(int *amaster, int *aslave, char *aname,
 	if (winsize)
 		ioctl(*aslave, TIOCSWINSZ, winsize);
 
+	fcntl(*amaster, F_SETFL, fcntl(*amaster, F_GETFL) | O_NONBLOCK);
 	return 0;
 }
 

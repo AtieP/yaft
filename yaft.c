@@ -51,7 +51,7 @@ void set_rawmode(int fd, struct termios *save_tm)
 	tm.c_cflag    &= ~CSIZE;
 	tm.c_cflag    |= CS8;
 	tm.c_lflag    &= ~(ECHO | ISIG | ICANON);
-	tm.c_cc[VMIN]  = 1; /* min data size (byte) */
+	tm.c_cc[VMIN]  = 0; /* min data size (byte) */
 	tm.c_cc[VTIME] = 0; /* time out */
 	etcsetattr(fd, TCSAFLUSH, &tm);
 }
@@ -166,6 +166,9 @@ int main(int argc, char *const argv[])
 	extern volatile sig_atomic_t child_alive;
 	extern struct termios termios_orig;
 
+	fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL)
+			| O_NONBLOCK);
+
 	/* init */
 	if (setlocale(LC_ALL, "") == NULL) /* for wcwidth() */
 		logging(WARN, "setlocale falied\n");
@@ -202,14 +205,15 @@ int main(int argc, char *const argv[])
 			refresh(&fb, &term);
 		}
 
-		if (check_fds(&fds, &tv, STDIN_FILENO, term.fd) == -1)
-			continue;
+/*		if (check_fds(&fds, &tv, STDIN_FILENO, term.fd) == -1)
+			continue;*/
 
-		if (FD_ISSET(STDIN_FILENO, &fds)) {
+		/*if (FD_ISSET(STDIN_FILENO, &fds)) {*/
 			if ((size = read(STDIN_FILENO, buf, BUFSIZE)) > 0)
 				ewrite(term.fd, buf, size);
-		}
-		if (FD_ISSET(term.fd, &fds)) {
+		/*}*/
+		/*
+		if (FD_ISSET(term.fd, &fds)) {*/
 			if ((size = read(term.fd, buf, BUFSIZE)) > 0) {
 				if (VERBOSE)
 					ewrite(STDOUT_FILENO, buf, size);
@@ -218,7 +222,7 @@ int main(int argc, char *const argv[])
 					continue; /* maybe more data arrives soon */
 				refresh(&fb, &term);
 			}
-		}
+		/*}*/
 	}
 
 	/* normal exit */

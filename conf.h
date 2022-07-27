@@ -13,9 +13,9 @@ enum {
 enum {
 	VERBOSE          = false,  /* write dump of input to stdout, debug message to stderr */
 	TABSTOP          = 8,      /* hardware tabstop */
-	LAZY_DRAW        = true,   /* don't draw when input data size is larger than BUFSIZE */
+	LAZY_DRAW        = false,   /* don't draw when input data size is larger than BUFSIZE */
 	BACKGROUND_DRAW  = false,  /* always draw even if vt is not active */
-	VT_CONTROL       = true,   /* handle vt switching */
+	VT_CONTROL       = false,   /* handle vt switching */
 	FORCE_TEXT_MODE  = false,  /* force KD_TEXT mode (not use KD_GRAPHICS mode) */
 	SUBSTITUTE_HALF  = 0x0020, /* used for missing glyph(single width): U+0020 (SPACE) */
 	SUBSTITUTE_WIDE  = 0x3000, /* used for missing glyph(double width): U+3000 (IDEOGRAPHIC SPACE) */
@@ -26,7 +26,7 @@ enum {
 const char *term_name = "yaft-256color";
 
 /* framubuffer device */
-#if defined(__linux__)
+#if defined(__linux__) || defined(__pastoral__)
 	const char *fb_path = "/dev/fb0";
 #elif defined(__FreeBSD__)
 	const char *fb_path = "/dev/ttyv0";
@@ -45,4 +45,6 @@ const char *term_name = "yaft-256color";
 	const char *shell_cmd = "/bin/csh";
 #elif defined(__ANDROID__)
 	const char *shell_cmd = "/system/bin/sh";
+#elif defined(__pastoral__)
+	const char *shell_cmd = "/usr/bin/bash";
 #endif

@@ -1,4 +1,5 @@
-CC ?= gcc
+HOST_CC = cc
+CC = ../build/tools/host-gcc/bin/x86_64-pastoral-gcc
 #CC ?= clang
 
 CFLAGS  ?= -std=c99 -pedantic -Wall -Wextra -O3 -s -pipe
@@ -12,7 +13,7 @@ HDR = glyph.h yaft.h conf.h color.h parse.h terminal.h util.h \
 	fb/common.h fb/linux.h fb/freebsd.h fb/netbsd.h fb/openbsd.h \
 	x/x.h
 
-DESTDIR   =
+DESTDIR   = ../build/system-root
 PREFIX    = $(DESTDIR)/usr
 MANPREFIX = $(DESTDIR)/usr/share/man
 
@@ -23,7 +24,7 @@ yaft: mkfont_bdf
 yaftx: mkfont_bdf
 
 mkfont_bdf: tools/mkfont_bdf.c tools/mkfont_bdf.h tools/bdf.h tools/util.h
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
+	$(HOST_CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
 
 glyph.h: mkfont_bdf
 	# If you want to use your favorite fonts, please change following line
