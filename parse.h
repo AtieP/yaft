@@ -2,7 +2,7 @@
 void (*ctrl_func[CTRL_CHARS])(struct terminal_t *term) = {
 	[BS]  = bs,
 	[HT]  = tab,
-	[LF]  = nl,
+	[LF]  = crnl,
 	[VT]  = nl,
 	[FF]  = nl,
 	[CR]  = cr,
